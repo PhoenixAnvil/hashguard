@@ -1,3 +1,10 @@
+"""
+HashGuard CLI
+
+A secure local file copy tool that verifies file integrity using hash functions.
+Supports custom hashing algorithms, verbose output, and listing available algorithms.
+"""
+
 import argparse
 import hashlib
 from pathlib import Path
@@ -6,6 +13,12 @@ from hashguard.copy import copy_file
 
 
 def setup_cli():
+    """
+    Set up and parse command-line arguments for the HashGuard CLI tool.
+
+    Returns:
+        argparse.Namespace: Parsed CLI arguments.
+    """
     parser = argparse.ArgumentParser(
         prog="HashGuard", description="Secure Local File Copy CLI Tool"
     )
@@ -31,11 +44,23 @@ def setup_cli():
 
 
 def file_exists(filepath):
+    """
+    Check whether the specified file exists.
+
+    Args:
+        filepath (str): Path to the file.
+
+    Returns:
+        bool: True if the file exists, False otherwise.
+    """
     file_path = Path(filepath)
     return file_path.exists()
 
 
 def list_algorithms():
+    """
+    Print a sorted list of available hashing algorithms.
+    """
     for alg in sorted(
         hashlib.algorithms_available, key=lambda a: a.lower()
     ):
@@ -43,13 +68,27 @@ def list_algorithms():
 
 
 def algorithm_exists(hashalg):
+    """
+    Check whether the given hashing algorithm is supported.
+
+    Args:
+        hashalg (str): Name of the hashing algorithm.
+
+    Returns:
+        bool: True if the algorithm exists, False otherwise.
+    """
     return hashalg.lower() in {
         alg.lower() for alg in hashlib.algorithms_available
     }
 
 
 def main():
-    """Parse CLI arguments and perform a secure file copy."""
+    """
+    Entry point for the HashGuard CLI.
+
+    Parses command-line arguments, validates inputs, performs the secure
+    file copy, and optionally prints results.
+    """
     args = setup_cli()
 
     if args.list_algorithms:
